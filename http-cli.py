@@ -13,6 +13,8 @@ CONF_PATH = os.path.join(ROOT_DIR, "http-cli.conf")
 SERVER_DOMAIN = "demo.q2k.dev"
 SERVER_URL = f"https://{SERVER_DOMAIN}"
 PID_FILE_PATH = os.path.join(ROOT_DIR, "http-cli.pid")
+EXECUTE_DIR = os.path.dirname(os.path.abspath(__file__))
+SSH_EXECUTE_PATH = os.path.join(EXECUTE_DIR, "ssh.exe") if os.name == "nt" else "ssh"  # noqa
 
 
 def save_pid_to_file(pid):
@@ -56,17 +58,11 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     :param local_port: Local port number
     :param key_path: Key file path
     """
-    if os.name == "nt":
-        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        ssh_execute_path = os.path.join(CURRENT_DIR, "ssh.exe")
-        if not os.path.exists(ssh_execute_path):
-            print("[-] Internal SSH not found.")
-            return
-    else:
-        ssh_execute_path = "ssh"
-
+    if not os.path.exists(SSH_EXECUTE_PATH):
+        print("[-] Internal SSH not found.")
+        return
     ssh_command = [
-        ssh_execute_path,
+        SSH_EXECUTE_PATH,
         "-N",
         "-p", "2222",
         "-R", f"{remote_port}:127.0.0.1:{local_port}",
@@ -100,7 +96,7 @@ def stop_daemon():
         print("[-] PID file not found.")
 
 
-def start_without_daemon(user: str, remote_port: str, local_port: int, key_path: str):
+def start_without_daemon(user: str, remote_port: str, local_port: int, key_path: str):  # noqa
     """
     Start the SSH tunnel without daemon mode.
     :param user: Username
@@ -108,17 +104,12 @@ def start_without_daemon(user: str, remote_port: str, local_port: int, key_path:
     :param local_port: Local port number
     :param key_path: Key file path
     """
-    if os.name == "nt":
-        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        ssh_execute_path = os.path.join(CURRENT_DIR, "ssh.exe")
-        if not os.path.exists(ssh_execute_path):
-            print("[-] Internal SSH not found.")
-            return
-    else:
-        ssh_execute_path = "ssh"
+    if not os.path.exists(SSH_EXECUTE_PATH):
+        print("[-] Internal SSH not found.")
+        return
 
     ssh_command = [
-        ssh_execute_path,
+        SSH_EXECUTE_PATH,
         "-N",
         "-p", "2222",
         "-R", f"{remote_port}:127.0.0.1:{local_port}",
