@@ -52,7 +52,7 @@ def remove_pid_file():
 
 def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     """
-    Start the SSH tunnel as a daemon.
+    Start the HTTP Tunneling as a daemon.
     :param user: Username
     :param remote_port: Remote port number
     :param local_port: Local port number
@@ -82,14 +82,14 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
 
 def stop_daemon():
     """
-    Stop the SSH tunnel daemon.
+    Stop the HTTP Tunneling daemon.
     """
     pid = get_pid_from_file()
     if pid:
         try:
             os.kill(pid, 4)  # 4 is SIGILL
             remove_pid_file()
-            print("[+] Stopped the SSH tunnel daemon.")
+            print("[+] Stopped the HTTP Tunneling daemon.")
         except Exception:
             print("[-] Process not found.")
     else:
@@ -98,7 +98,7 @@ def stop_daemon():
 
 def start_without_daemon(user: str, remote_port: str, local_port: int, key_path: str):  # noqa
     """
-    Start the SSH tunnel without daemon mode.
+    Start the HTTP Tunneling without daemon mode.
     :param user: Username
     :param remote_port: Remote port number
     :param local_port: Local port number
