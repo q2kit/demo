@@ -58,7 +58,7 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     :param local_port: Local port number
     :param key_path: Key file path
     """
-    if not os.path.exists(SSH_EXECUTE_PATH):
+    if os.name == "nt" and not os.path.exists(SSH_EXECUTE_PATH):
         print("[-] Internal SSH not found.")
         return
     ssh_command = [
@@ -104,7 +104,7 @@ def start_without_daemon(user: str, remote_port: str, local_port: int, key_path:
     :param local_port: Local port number
     :param key_path: Key file path
     """
-    if not os.path.exists(SSH_EXECUTE_PATH):
+    if os.name == "nt" and not os.path.exists(SSH_EXECUTE_PATH):
         print("[-] Internal SSH not found.")
         return
 
@@ -287,6 +287,8 @@ def main():
                 domain = input("[?] Domain: ")
                 secret_key = input("[?] Secret_key: ")
                 save_configuration(domain, secret_key)
+                print("[+] Configuration saved.")
+                return
         else:
             domain, secret_key = get_configuration()
             if not domain or not secret_key:

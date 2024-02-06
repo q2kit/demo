@@ -3,14 +3,13 @@
 Python installed on your Linux machine.
 Make sure you have pyinstaller and requests installed. If not, install them using the following commands:
 ```bash
-pip install pyinstaller
-pip install requests
+pip install -r requirements.txt
 ```
 ## Build Steps:
 Open a terminal and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```bash
-pyinstaller http-cli.py
+pyinstaller --onefile http-cli.py
 ```
 After the build is complete, you will find the executable in the `dist` directory.
 
@@ -19,8 +18,7 @@ After the build is complete, you will find the executable in the `dist` director
 Python installed on your Windows machine.
 Make sure you have pyinstaller and requests installed. If not, install them using the following commands:
 ```cmd
-pip install pyinstaller
-pip install requests
+pip install -r requirements.txt
 ```
 Copy the `_internal/ssh.exe` file to `dist/_internal` after the build. This is required for the ssh command to work in the Windows executable.
 ## Build Steps:
