@@ -25,7 +25,7 @@ Copy the `_internal/ssh.exe` file to `dist/_internal` after the build. This is r
 Open a command prompt and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```cmd
-pyinstaller http-cli.py
+pyinstaller --icon=icon.ico http-cli.py
 ```
 After the build is complete, copy the `_internal/ssh.exe` file to the `dist/_internal` directory.
 
