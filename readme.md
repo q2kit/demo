@@ -1,11 +1,17 @@
-# Building for Linux:
-## Prerequisites:
+# Usage
+<video width="640" controls>
+  <source src="https://github.com/q2kit/http-cli/assets/67795391/c7302308-5687-471a-8c8d-03857bcb3271" type="video/mp4">
+</video>
+
+# Building the Executable
+## Building for Linux:
+### Prerequisites:
 Python installed on your Linux machine.
 Make sure you have pyinstaller and requests installed. If not, install them using the following commands:
 ```bash
 pip install -r requirements.txt
 ```
-## Build Steps:
+### Build Steps:
 Open a terminal and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```bash
@@ -13,15 +19,15 @@ pyinstaller --onefile http-cli.py
 ```
 After the build is complete, you will find the executable in the `dist` directory.
 
-# Building for Windows:
-## Prerequisites:
+## Building for Windows:
+### Prerequisites:
 Python installed on your Windows machine.
 Make sure you have pyinstaller and requests installed. If not, install them using the following commands:
 ```cmd
 pip install -r requirements.txt
 ```
 Copy the `_internal/ssh.exe` file to `dist/_internal` after the build. This is required for the ssh command to work in the Windows executable.
-## Build Steps:
+### Build Steps:
 Open a command prompt and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```cmd
