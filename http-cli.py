@@ -20,6 +20,12 @@ SSH_EXECUTE_PATH = os.path.join(EXECUTE_DIR, "ssh.exe") if os.name == "nt" else 
 def save_pid_to_file(pid):
     """
     Save the PID to a file.
+
+    Args:
+        pid (int): The process ID to be saved.
+
+    Returns:
+        None
     """
     with open(PID_FILE_PATH, "w") as file:
         file.write(str(pid))
@@ -28,7 +34,10 @@ def save_pid_to_file(pid):
 def get_pid_from_file() -> int:
     """
     Get the PID from the file.
-    :return: PID: int
+
+    :return: The PID (Process ID) read from the file as an integer.
+             If the file does not exist or the PID is not a valid integer,
+             None is returned.
     """
     try:
         with open(PID_FILE_PATH, "r") as file:
@@ -43,6 +52,9 @@ def get_pid_from_file() -> int:
 def remove_pid_file():
     """
     Remove the PID file.
+
+    This function removes the PID file specified by the `PID_FILE_PATH` constant.
+    If the file does not exist, it silently ignores the error.
     """
     try:
         os.remove(PID_FILE_PATH)
@@ -53,6 +65,7 @@ def remove_pid_file():
 def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     """
     Start the HTTP Tunneling as a daemon.
+
     :param user: Username
     :param remote_port: Remote port number
     :param local_port: Local port number
@@ -83,6 +96,10 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
 def stop_daemon():
     """
     Stop the HTTP Tunneling daemon.
+
+    This function stops the HTTP Tunneling daemon by sending a signal (SIGILL) to the process ID (PID)
+    obtained from the PID file. If the PID file is not found or the process is not running, appropriate
+    error messages are displayed.
     """
     pid = get_pid_from_file()
     if pid:
@@ -99,6 +116,7 @@ def stop_daemon():
 def start_without_daemon(user: str, remote_port: str, local_port: int, key_path: str):  # noqa
     """
     Start the HTTP Tunneling without daemon mode.
+
     :param user: Username
     :param remote_port: Remote port number
     :param local_port: Local port number
@@ -125,9 +143,10 @@ def start_without_daemon(user: str, remote_port: str, local_port: int, key_path:
 def download_key_file(domain: str, secret_key: str) -> str:
     """
     Get the key file from the server.
-    :param domain: Domain
-    :param secret_key: Secret key
-    :return: Key file path
+
+    :param domain: The domain for which the key file is requested.
+    :param secret_key: The secret key used for authentication.
+    :return: The file path of the downloaded key file.
     """
     url = f"{SERVER_URL}/get_key_file/"
     data = {"domain": domain, "secret": secret_key}
@@ -146,8 +165,11 @@ def download_key_file(domain: str, secret_key: str) -> str:
 def is_valid_port(port: str) -> bool:
     """
     Check if the port number is valid.
+
     :param port: Port number
-    :return: True if valid
+    :type port: str
+    :return: True if the port number is valid, False otherwise
+    :rtype: bool
     """
     port_num = int(port)
     return 1 <= port_num <= 65535
@@ -156,6 +178,7 @@ def is_valid_port(port: str) -> bool:
 def get_configuration() -> tuple:
     """
     Get the configuration from the user.
+
     :return: Tuple containing domain and secret key
     """
     try:
@@ -172,6 +195,7 @@ def get_configuration() -> tuple:
 def save_configuration(domain, secret_key):
     """
     Save the configuration to the user's home directory.
+    
     :param domain: Domain
     :param secret_key: Secret key
     """
@@ -184,7 +208,9 @@ def save_configuration(domain, secret_key):
 def is_server_available() -> bool:
     """
     Check if the server is available.
-    :return: True if available
+
+    :return: True if the server is available, False otherwise.
+    :rtype: bool
     """
     return requests.get(f"{SERVER_URL}/health").status_code == 200
 
@@ -192,9 +218,10 @@ def is_server_available() -> bool:
 def send_connection_signal(domain: str, secret_key: str, local_port: int):
     """
     Send a signal to the server to create a connection.
-    :param domain: Domain
-    :param secret_key: Secret key
-    :param local_port: Local port number
+    
+    :param domain: Domain name of the server.
+    :param secret_key: Secret key for authentication.
+    :param local_port: Local port number to establish the connection.
     """
     url = f"{SERVER_URL}/connect/"
     data = {"domain": domain, "secret": secret_key, "port": local_port}
@@ -204,8 +231,10 @@ def send_connection_signal(domain: str, secret_key: str, local_port: int):
 def fetch_connection_info(domain: str) -> tuple:
     """
     Get the user and port number from the server.
-    :param domain: Domain
-    :return: Tuple containing user, port, and domain
+
+    :param domain: Domain name of the server.
+    :return: Tuple containing user and port number.
+    :raises Exception: If there is an error retrieving the connection info.
     """
     url = f"{SERVER_URL}/get_connection_info/"
     data = {"domain": domain}
@@ -226,6 +255,7 @@ def fetch_connection_info(domain: str) -> tuple:
 def display_banner(local_port: str, domain: str, daemon: bool = False):
     """
     Print the banner with connection information.
+
     :param local_port: Local port number
     :param domain: Remote domain
     :param daemon: True if daemon mode
