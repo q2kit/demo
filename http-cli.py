@@ -212,7 +212,10 @@ def is_server_available() -> bool:
     :return: True if the server is available, False otherwise.
     :rtype: bool
     """
-    return requests.get(f"{SERVER_URL}/health").status_code == 200
+    try:
+        return requests.get(f"{SERVER_URL}/health").status_code == 200
+    except requests.RequestException:
+        return False
 
 
 def send_connection_signal(domain: str, secret_key: str, local_port: int):
