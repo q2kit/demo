@@ -1,8 +1,17 @@
+# DEMO
+The "DEMO" program is a convenient tool that enables users to make their websites accessible from the internet, even though the websites are running on their local machines.
 # Usage
-<video width="640" controls>
-  <source src="https://github.com/q2kit/http-cli/assets/67795391/c7302308-5687-471a-8c8d-03857bcb3271" type="video/mp4">
-</video>
-
+### Step 1: Create a project
+- Visit the website https://demo.netswift.org.
+- Sign in or create an account if you haven't already.
+- After logging in, navigate to the project creation section. This may be labeled as "Create Project" or similar.
+- Fill in the required information for your project, such as the project name and domain (if applicable).
+- After the project is created successfully, you'll be provided with a secret key. Copy this secret key as you'll need it for the next step.
+### Step 2: Run the DEMO program
+- Download the DEMO program from the releases section of the repository.
+- Once downloaded, unzip the CLI package and install it on your computer.
+- Open a terminal or command prompt window. (You can add a path to the environment variables to run the program from any directory)
+- Run the command `demo -h` to display detailed instructions and options for using the "DEMO" tool.
 # Building the Executable
 ## Building for Linux:
 ### Prerequisites:
@@ -15,7 +24,7 @@ pip install -r requirements.txt
 Open a terminal and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```bash
-pyinstaller --onefile http-cli.py
+pyinstaller --onefile demo.py
 ```
 After the build is complete, you will find the executable in the `dist` directory.
 
@@ -31,11 +40,11 @@ Copy the `_internal/ssh.exe` file to `dist/_internal` after the build. This is r
 Open a command prompt and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```cmd
-pyinstaller --icon=icon.ico http-cli.py
+pyinstaller --icon=icon.ico demo.py
 ```
 After the build is complete, copy the `_internal/ssh.exe` file to the `dist/_internal` directory.
 
 # Server Repository:
-For the server-side of this application, please visit the [Server Repository](https://github.com/q2kit/http-server) for more information.
+For the server-side of this application, please visit the [Server Repository](https://github.com/q2kit/demo-server) for more information.
 
 Now you should have the executables ready for both Linux and Windows. Make sure to include these instructions in your README file along with the link to the server repository.

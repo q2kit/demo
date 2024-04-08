@@ -6,13 +6,13 @@ import requests
 
 TEMP_DIR = os.getenv("TEMP") if os.name == "nt" else "/tmp"
 HOME_DIR = os.path.expandvars('%USERPROFILE%') if os.name == "nt" else os.path.expanduser("~")  # noqa
-ROOT_DIR = os.path.join(HOME_DIR, ".http-cli")
+ROOT_DIR = os.path.join(HOME_DIR, ".demo")
 if not os.path.exists(ROOT_DIR):
     os.makedirs(ROOT_DIR)
-CONF_PATH = os.path.join(ROOT_DIR, "http-cli.conf")
-SERVER_DOMAIN = "demo.q2k.dev"
+CONF_PATH = os.path.join(ROOT_DIR, "demo.conf")
+SERVER_DOMAIN = "demo.netswift.org"
 SERVER_URL = f"https://{SERVER_DOMAIN}"
-PID_FILE_PATH = os.path.join(ROOT_DIR, "http-cli.pid")
+PID_FILE_PATH = os.path.join(ROOT_DIR, "demo.pid")
 EXECUTE_DIR = os.path.dirname(os.path.abspath(__file__))
 SSH_EXECUTE_PATH = os.path.join(EXECUTE_DIR, "ssh.exe") if os.name == "nt" else "ssh"  # noqa
 
@@ -64,7 +64,7 @@ def remove_pid_file():
 
 def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     """
-    Start the HTTP Tunneling as a daemon.
+    Start Demo as a daemon.
 
     :param user: Username
     :param remote_port: Remote port number
@@ -95,18 +95,19 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
 
 def stop_daemon():
     """
-    Stop the HTTP Tunneling daemon.
+    Stop Demo daemon.
 
-    This function stops the HTTP Tunneling daemon by sending a signal (SIGILL) to the process ID (PID)
-    obtained from the PID file. If the PID file is not found or the process is not running, appropriate
-    error messages are displayed.
+    This function stops Demo daemon by sending a signal (SIGILL) to
+    the process ID (PID) obtained from the PID file.
+    If the PID file is not found or the process is not running,
+    appropriate error messages are displayed.
     """
     pid = get_pid_from_file()
     if pid:
         try:
             os.kill(pid, 4)  # 4 is SIGILL
             remove_pid_file()
-            print("[+] Stopped the HTTP Tunneling daemon.")
+            print("[+] Stopped Demo daemon.")
         except Exception:
             print("[-] Process not found.")
     else:
@@ -115,7 +116,7 @@ def stop_daemon():
 
 def start_without_daemon(user: str, remote_port: str, local_port: int, key_path: str):  # noqa
     """
-    Start the HTTP Tunneling without daemon mode.
+    Start Demo without daemon mode.
 
     :param user: Username
     :param remote_port: Remote port number
@@ -195,7 +196,7 @@ def get_configuration() -> tuple:
 def save_configuration(domain, secret_key):
     """
     Save the configuration to the user's home directory.
-    
+
     :param domain: Domain
     :param secret_key: Secret key
     """
@@ -221,7 +222,7 @@ def is_server_available() -> bool:
 def send_connection_signal(domain: str, secret_key: str, local_port: int):
     """
     Send a signal to the server to create a connection.
-    
+
     :param domain: Domain name of the server.
     :param secret_key: Secret key for authentication.
     :param local_port: Local port number to establish the connection.
@@ -244,7 +245,7 @@ def fetch_connection_info(domain: str) -> tuple:
     response = requests.post(url, data=data)
 
     if response.status_code != 200:
-        return None, None, None
+        raise Exception("Invalid configuration, run demo -c domain:secret_key to set the configuration.")  # noqa
 
     response = response.json()
     user, port = response.get("user"), response.get("port")
@@ -270,15 +271,15 @@ def display_banner(local_port: str, domain: str, daemon: bool = False):
 
     print()
     print("~" * max_len)
-    print(f"/{' ' * (max_len // 2 - 8)}HTTP Tunneling{' ' * (max_len // 2 - 8 + (max_len) % 2)}\\")  # noqa
-    print(f"\\{' ' * (max_len // 2 - 8)}``````````````{' ' * (max_len // 2 - 8 + (max_len) % 2)}/")  # noqa
+    print(f"/{' ' * (max_len // 2 - 3)}DEMO{' ' * (max_len // 2 - 3 + (max_len) % 2)}\\")  # noqa
+    print(f"\\{' ' * (max_len // 2 - 4)}``````{' ' * (max_len // 2 - 4 + (max_len) % 2)}/")  # noqa
     print(f"/{' ' * (max_len - 2)}\\")
     print(f"\\ {local_line}{' ' * (max_len - 4 - len(local_line))} /")
     print(f"/ {remote_line}{' ' * (max_len - 4 - len(remote_line))} \\")
     print(f"\\{' ' * (max_len - 2)}/")
     print(f"/{' ' * (max_len - 2)}\\")
     if daemon:
-        print(f"\\ Close connection: http-cli -s{' ' * (max_len - 32)}/")
+        print(f"\\ Close connection: demo -s{' ' * (max_len - 28)}/")
     else:
         print(f"\\ Ctrl + C to exit{' ' * (max_len - 19)}/")
     print("~" * max_len)
@@ -286,7 +287,7 @@ def display_banner(local_port: str, domain: str, daemon: bool = False):
 
 def main():
     try:
-        parser = argparse.ArgumentParser(description="HTTP Tunneling")
+        parser = argparse.ArgumentParser(description="DEMO")
         parser.add_argument("-p", "--port", type=str, help="Local port number (1-65535)")  # noqa
         parser.add_argument("-c", "--config", type=str, help="Set the domain and secret_key (domain:secret_key)")  # noqa
         parser.add_argument("-d", "--daemon", action="store_true", help="Start as daemon")  # noqa
@@ -309,7 +310,7 @@ def main():
             try:
                 domain, secret_key = args.config.split(":")
             except ValueError:
-                print("[-] Invalid format. Ex: http-cli -c domain:secret_key")  # noqa
+                print("[-] Invalid format. Ex: demo -c domain:secret_key")  # noqa
                 return
             if domain and secret_key:
                 save_configuration(domain, secret_key)
@@ -362,7 +363,8 @@ def main():
                 print("\n[+] Exiting...")
 
     except Exception as e:
-        print(f"[-] {e}")
+        print("[-] Something went wrong. Please contact the administrator.")
+        print("[-] Error details:", e)
 
 
 if __name__ == "__main__":
