@@ -232,6 +232,22 @@ def send_connection_signal(domain: str, secret_key: str, local_port: int):
     requests.post(url, data=data)
 
 
+def send_disconnection_signal(domain: str = None, secret_key: str = None):
+    """
+    Send a signal to the server to close the connection.
+
+    :param domain: Domain name of the server.
+    """
+    url = f"{SERVER_URL}/disconnect/"
+    if not domain or not secret_key:
+        domain, secret_key = get_configuration()
+    data = {
+        "domain": domain,
+        "secret": secret_key,
+    }
+    requests.post(url, data=data)
+
+
 def fetch_connection_info(domain: str) -> tuple:
     """
     Get the user and port number from the server.
@@ -304,6 +320,7 @@ def main():
 
         if args.stop:
             stop_daemon()
+            send_disconnection_signal()
             return
 
         if args.config:
@@ -361,6 +378,8 @@ def main():
                 )
             except KeyboardInterrupt:
                 print("\n[+] Exiting...")
+            finally:
+                send_disconnection_signal(domain)
 
     except Exception as e:
         print("[-] Something went wrong. Please contact the administrator.")
