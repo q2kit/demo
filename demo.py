@@ -13,8 +13,10 @@ CONF_PATH = os.path.join(ROOT_DIR, "demo.conf")
 SERVER_DOMAIN = "demo.netswift.org"
 SERVER_URL = f"https://{SERVER_DOMAIN}"
 PID_FILE_PATH = os.path.join(ROOT_DIR, "demo.pid")
-EXECUTE_DIR = os.path.dirname(os.path.abspath(__file__))
-SSH_EXECUTE_PATH = os.path.join(EXECUTE_DIR, "ssh.exe") if os.name == "nt" else "ssh"  # noqa
+if os.name == "nt":
+    SSH_EXECUTE_PATH = os.path.join(os.path.dirname(__file__), "ssh.exe")
+else:
+    SSH_EXECUTE_PATH = "ssh"
 
 
 def save_pid_to_file(pid):
@@ -74,6 +76,7 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     if os.name == "nt" and not os.path.exists(SSH_EXECUTE_PATH):
         print("[-] Internal SSH not found.")
         return
+
     ssh_command = [
         SSH_EXECUTE_PATH,
         "-N",
