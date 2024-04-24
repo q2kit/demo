@@ -264,7 +264,7 @@ def fetch_connection_info(domain: str) -> tuple:
     response = requests.post(url, data=data)
 
     if response.status_code != 200:
-        raise Exception("Invalid configuration, run demo -c domain:secret_key to set the configuration.")  # noqa
+        raise Exception("Invalid configuration, please check the configuration.")
 
     response = response.json()
     user, port = response.get("user"), response.get("port")
@@ -311,45 +311,48 @@ def main():
         parser.add_argument("-c", "--config", type=str, help="Set the domain and secret_key (domain:secret_key)")  # noqa
         parser.add_argument("-d", "--daemon", action="store_true", help="Start as daemon")  # noqa
         parser.add_argument("-s", "--stop", action="store_true", help="Stop the daemon")  # noqa
+        parser.add_argument("-otc", "--one-time-connection", type=str, help="One time connection. (domain:secret)")  # noqa
         args = parser.parse_args()
-
-        if not any(vars(args).values()):
-            parser.print_help()
-            return
-
-        if args.stop and (args.port or args.config or args.daemon):
-            parser.print_help()
-            return
 
         if args.stop:
             stop_daemon()
             send_disconnection_signal()
             return
 
-        if args.config:
+        if args.one_time_connection:
             try:
-                domain, secret_key = args.config.split(":")
+                domain, secret_key = args.one_time_connection.split(":")
+                if not domain or not secret_key:
+                    raise ValueError
             except ValueError:
-                print("[-] Invalid format. Ex: demo -c domain:secret_key")  # noqa
-                return
-            if domain and secret_key:
-                save_configuration(domain, secret_key)
-                print("[+] Configuration saved.")
-                return
-            else:
-                print("[o] Please set the domain and secret_key")
-                domain = input("[?] Domain: ")
-                secret_key = input("[?] Secret_key: ")
-                save_configuration(domain, secret_key)
-                print("[+] Configuration saved.")
+                print("[-] Invalid format. Ex: demo -otc domain:secret_key")
                 return
         else:
-            domain, secret_key = get_configuration()
-            if not domain or not secret_key:
-                print("[o] Please set the domain and secret_key")
-                domain = input("[?] Domain: ")
-                secret_key = input("[?] Secret_key: ")
-                save_configuration(domain, secret_key)
+            if args.config:
+                try:
+                    domain, secret_key = args.config.split(":")
+                except ValueError:
+                    print("[-] Invalid format. Ex: demo -c domain:secret_key")  # noqa
+                    return
+                if domain and secret_key:
+                    save_configuration(domain, secret_key)
+                    print("[+] Configuration saved.")
+                    if not args.port:
+                        return
+                else:
+                    print("[o] Please set the domain and secret_key")
+                    domain = input("[?] Domain: ")
+                    secret_key = input("[?] Secret_key: ")
+                    save_configuration(domain, secret_key)
+                    print("[+] Configuration saved.")
+                    return
+            else:
+                domain, secret_key = get_configuration()
+                if not domain or not secret_key:
+                    print("[o] Please set the domain and secret_key")
+                    domain = input("[?] Domain: ")
+                    secret_key = input("[?] Secret_key: ")
+                    save_configuration(domain, secret_key)
 
         local_port = args.port or 80
         if not is_valid_port(local_port):
