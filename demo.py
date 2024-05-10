@@ -226,7 +226,7 @@ def send_connection_signal(domain: str, secret_key: str, local_port: int):
     """
     Send a signal to the server to create a connection.
 
-    :param domain: Domain name of the server.
+    :param domain: Domain name of the project.
     :param secret_key: Secret key for authentication.
     :param local_port: Local port number to establish the connection.
     """
@@ -239,7 +239,7 @@ def fetch_connection_info(domain: str) -> tuple:
     """
     Get the user and port number from the server.
 
-    :param domain: Domain name of the server.
+    :param domain: Domain name of the project.
     :return: Tuple containing user and port number.
     :raises Exception: If there is an error retrieving the connection info.
     """
