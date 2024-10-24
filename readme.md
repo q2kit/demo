@@ -35,14 +35,13 @@ Make sure you have pyinstaller and requests installed. If not, install them usin
 ```cmd
 pip install -r requirements.txt
 ```
-Copy the `_internal/ssh.exe` file to `dist/_internal` after the build. This is required for the ssh command to work in the Windows executable.
 ### Build Steps:
 Open a command prompt and navigate to the directory containing the script.
 Run the following command to build the executable:
 ```cmd
 pyinstaller --icon=icon.ico demo.py
 ```
-After the build is complete, copy the `_internal/ssh.exe` file to the `dist/_internal` directory.
+After the build is complete, copy the `_internal/ssh.exe` file to the `dist/demo/_internal` directory.
 
 # Server Repository:
 For the server-side of this application, please visit the [Server Repository](https://github.com/q2kit/demo-server) for more information.

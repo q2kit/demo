@@ -1,0 +1,139 @@
+name: Build Python App and Create Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      # Check out the repository
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run PyInstaller to build the executable
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --icon=icon.ico demo.py
+
+      # Copy ssh.exe to the dist/demo/_internal folder
+      - name: Copy ssh.exe
+        run: |
+          cp _internal/ssh.exe dist/demo/_internal/
+
+      # Zip the dist folder
+      - name: Zip dist folder
+        run: |
+          cd dist/demo
+          Compress-Archive -Path * -DestinationPath demo_windows.zip
+
+      # Upload the artifact for release
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: demo-windows
+          path: dist/demo/demo_windows.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Run PyInstaller to build the executable
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile demo.py
+
+      # Zip the dist folder
+      - name: Zip dist folder
+        run: |
+          cd dist
+          zip -r demo_linux.zip *
+
+      # Upload the artifact for release
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: demo-linux
+          path: dist/demo_linux.zip
+
+  # Create GitHub release and upload the artifacts
+  release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: demo-windows
+
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: demo-linux
+
+      - name: Create Tag
+        run: |
+          git tag v1.0.${{ github.run_number }}
+          git push origin v1.0.${{ github.run_number }}
+
+      - name: Create GitHub Release
+        id: create-release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: Release latest
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows build to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: demo_windows.zip
+          asset_name: demo_windows.zip
+          asset_content_type: application/zip
+
+      - name: Upload Linux build to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: demo_linux.zip
+          asset_name: demo_linux.zip
+          asset_content_type: application/zip
