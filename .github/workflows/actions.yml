@@ -73,7 +73,7 @@ jobs:
       # Run PyInstaller to build the executable
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile demo.py --name demo
+          pyinstaller --onefile main.py --name demo
 
       # Zip the dist folder
       - name: Zip dist folder
