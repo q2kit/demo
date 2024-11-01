@@ -37,11 +37,16 @@ pip install -r requirements.txt
 ```
 ### Build Steps:
 Open a command prompt and navigate to the directory containing the script.
+
 Run the following command to build the executable:
 ```cmd
 pyinstaller --icon=icon.ico demo.py
 ```
+
 After the build is complete, copy the `_internal/ssh.exe` file to the `dist/demo/_internal` directory.
+```
+cp _internal/ssh.exe dist/demo/_internal
+```
 
 # Server Repository:
 For the server-side of this application, please visit the [Server Repository](https://github.com/q2kit/demo-server) for more information.

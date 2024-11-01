@@ -12,6 +12,7 @@ if not os.path.exists(ROOT_DIR):
 CONF_PATH = os.path.join(ROOT_DIR, "demo.conf")
 SERVER_DOMAIN = "demo.netswift.org"
 SERVER_URL = f"https://{SERVER_DOMAIN}"
+SERVER_SSH_PORT = 2222
 PID_FILE_PATH = os.path.join(ROOT_DIR, "demo.pid")
 if os.name == "nt":
     SSH_EXECUTE_PATH = os.path.join(os.path.dirname(__file__), "ssh.exe")
@@ -80,7 +81,7 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
     ssh_command = [
         SSH_EXECUTE_PATH,
         "-N",
-        "-p", "2222",
+        "-p", str(SERVER_SSH_PORT),
         "-R", f"{remote_port}:127.0.0.1:{local_port}",
         f"{user}@{SERVER_DOMAIN}",
         "-i", key_path,
@@ -133,7 +134,7 @@ def start_without_daemon(user: str, remote_port: str, local_port: int, key_path:
     ssh_command = [
         SSH_EXECUTE_PATH,
         "-N",
-        "-p", "2222",
+        "-p", str(SERVER_SSH_PORT),
         "-R", f"{remote_port}:127.0.0.1:{local_port}",
         f"{user}@{SERVER_DOMAIN}",
         "-i", key_path,
