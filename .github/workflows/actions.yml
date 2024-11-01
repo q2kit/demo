@@ -31,7 +31,7 @@ jobs:
       # Run PyInstaller to build the executable
       - name: Build with PyInstaller
         run: |
-          pyinstaller --icon=icon.ico demo.py
+          pyinstaller --icon=icon.ico main.py --name demo
 
       # Copy ssh.exe to the dist/demo/_internal folder
       - name: Copy ssh.exe
@@ -73,7 +73,7 @@ jobs:
       # Run PyInstaller to build the executable
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile demo.py
+          pyinstaller --onefile demo.py --name demo
 
       # Zip the dist folder
       - name: Zip dist folder
