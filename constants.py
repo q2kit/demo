@@ -9,9 +9,10 @@ ROOT_DIR = os.path.join(HOME_DIR, ".demo")
 if not os.path.exists(ROOT_DIR):
     os.makedirs(ROOT_DIR)
 CONF_PATH = os.path.join(ROOT_DIR, "demo.conf")
-SERVER_DOMAIN = "netswift.org"
-SERVER_URL = f"https://{SERVER_DOMAIN}"
-SERVER_SSH_PORT = 2222
+HTTP_SERVER_DOMAIN = "netswift.org"
+SSH_SERVER_DOMAIN = "ssh.netswift.org"
+SERVER_URL = f"https://{HTTP_SERVER_DOMAIN}"
+SSH_SERVER_PORT = 2222
 PID_FILE_PATH = os.path.join(ROOT_DIR, "demo.pid")
 if os.name == "nt":
     SSH_EXECUTE_PATH = os.path.join(os.path.dirname(__file__), "ssh.exe")

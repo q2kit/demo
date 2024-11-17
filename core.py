@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from constants import SERVER_SSH_PORT, SSH_EXECUTE_PATH
+from constants import SSH_SERVER_DOMAIN, SSH_SERVER_PORT, SSH_EXECUTE_PATH
 from pid import save_pid_to_file, get_pid_from_file, remove_pid_file
 
 
@@ -22,10 +22,10 @@ def start_daemon(user: str, remote_port: str, local_port: int, key_path: str):
         SSH_EXECUTE_PATH,
         "-N",
         "-p",
-        str(SERVER_SSH_PORT),
+        str(SSH_SERVER_PORT),
         "-R",
         f"{remote_port}:127.0.0.1:{local_port}",
-        f"{user}@192.168.1.100",
+        f"{user}@{SSH_SERVER_DOMAIN}",
         "-i",
         key_path,
         "-o",
@@ -83,10 +83,10 @@ def start_without_daemon(
         SSH_EXECUTE_PATH,
         "-N",
         "-p",
-        str(SERVER_SSH_PORT),
+        str(SSH_SERVER_PORT),
         "-R",
         f"{remote_port}:127.0.0.1:{local_port}",
-        f"{user}@192.168.1.100",
+        f"{user}@{SSH_SERVER_DOMAIN}",
         "-i",
         key_path,
         "-o",
