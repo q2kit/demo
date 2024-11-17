@@ -9,7 +9,7 @@ ROOT_DIR = os.path.join(HOME_DIR, ".demo")
 if not os.path.exists(ROOT_DIR):
     os.makedirs(ROOT_DIR)
 CONF_PATH = os.path.join(ROOT_DIR, "demo.conf")
-SERVER_DOMAIN = "demo.netswift.org"
+SERVER_DOMAIN = "netswift.org"
 SERVER_URL = f"https://{SERVER_DOMAIN}"
 SERVER_SSH_PORT = 2222
 PID_FILE_PATH = os.path.join(ROOT_DIR, "demo.pid")
