@@ -3,7 +3,7 @@ The "DEMO" program is a convenient tool that enables users to make their website
 
 # Usage
 ### Step 1: Create a project
-- Visit the website https://demo.netswift.org.
+- Visit the website https://netswift.org.
 - Sign in or create an account if you haven't already.
 - After logging in, navigate to the project creation section. This may be labeled as "Create Project" or similar.
 - Fill in the required information for your project, such as the project name and domain (if applicable).
