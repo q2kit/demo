@@ -5,6 +5,7 @@ from conf import get_configuration, save_configuration
 from core import start_daemon, stop_daemon, start_without_daemon
 from connect import is_server_available, send_connection_signal, fetch_connection_info
 from func import download_key_file, is_valid_port
+from constants import SERVER_URL
 
 
 def main():
@@ -29,7 +30,16 @@ def main():
             type=str,
             help="One time connection. (domain:secret)",
         )
+        parser.add_argument("--health-check", action="store_true", help="Check server health")
         args = parser.parse_args()
+
+        if args.health_check:
+            print("[+] Checking server: ", SERVER_URL)
+            if is_server_available():
+                print("[+] Server is available.")
+            else:
+                print("[-] Server is not available.")
+            return
 
         if args.stop:
             stop_daemon()
