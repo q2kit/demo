@@ -13,7 +13,7 @@ def download_key_file(domain: str, secret_key: str) -> str:
     :return: The file path of the downloaded key file.
     """
     url = f"{SERVER_URL}/get_key_file/"
-    data = {"domain": domain, "secret": secret_key}
+    data = {"domain": domain, "secret_key": secret_key}
     response = requests.post(url, data=data)
     key_path = os.path.join(TEMP_DIR, "key.pem")
 

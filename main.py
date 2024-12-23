@@ -28,7 +28,7 @@ def main():
             "-otc",
             "--one-time-connection",
             type=str,
-            help="One time connection. (domain:secret)",
+            help="One time connection. (domain:secret_key)",
         )
         parser.add_argument("--health-check", action="store_true", help="Check server health")
         args = parser.parse_args()

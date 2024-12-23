@@ -16,7 +16,7 @@ def get_configuration() -> tuple:
 
         config = configparser.ConfigParser()
         config.read(CONF_PATH)
-        return config["CONF"]["domain"], config["CONF"]["secret"]
+        return config["CONF"]["domain"], config["CONF"]["secret_key"]
     except (KeyError, configparser.Error):
         return None, None
 
@@ -31,4 +31,4 @@ def save_configuration(domain, secret_key):
     with open(CONF_PATH, "w") as file:
         file.write("[CONF]\n")
         file.write(f"domain={domain}\n")
-        file.write(f"secret={secret_key}\n")
+        file.write(f"secret_key={secret_key}\n")

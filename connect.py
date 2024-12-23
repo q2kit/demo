@@ -25,7 +25,7 @@ def send_connection_signal(domain: str, secret_key: str, local_port: int):
     :param local_port: Local port number to establish the connection.
     """
     url = f"{SERVER_URL}/connect/"
-    data = {"domain": domain, "secret": secret_key, "port": local_port}
+    data = {"domain": domain, "secret_key": secret_key, "port": local_port}
     requests.post(url, data=data)
 
 
