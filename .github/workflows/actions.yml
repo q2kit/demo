@@ -113,11 +113,14 @@ jobs:
           git tag v1.0.${{ github.run_number }}
           git push origin v1.0.${{ github.run_number }}
 
+          git tag latest -f
+          git push origin latest -f
+
       - name: Create GitHub Release
         id: create-release
         uses: actions/create-release@v1
         with:
-          tag_name: v1.0.${{ github.run_number }}
+          tag_name: latest
           release_name: Release latest
           draft: false
           prerelease: false
