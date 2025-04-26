@@ -1,0 +1,18 @@
+[project]
+name = "demo"
+version = "0.1.0"
+description = "Reverse SSH CLI Tool with Remote Management"
+authors = [
+    { name = "Q2k", email = "q2k@q2k.dev" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "paramiko>=2.11.0",
+    "requests>=2.25.0"
+]
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
