@@ -1,0 +1,21 @@
+[project]
+name = "demo-cli"
+version = "1.0.0"
+description = "EZDEMO makes it easy to demo your web app."
+authors = [
+    { name = "Q2k", email = "q2k@q2k.dev" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "paramiko>=2.11.0",
+    "requests>=2.25.0"
+]
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+demo = "demo.cli:main"
