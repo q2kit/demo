@@ -1,6 +1,6 @@
 [project]
 name = "demo-cli"
-version = "1.0.3"
+version = "1.0.4"
 description = "EZDEMO makes it easy to demo your web app."
 authors = [
     { name = "Q2k", email = "q2k@q2k.dev" }

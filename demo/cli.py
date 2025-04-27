@@ -27,7 +27,7 @@ HTTP_SERVER_DOMAIN = "ezdemo.org"
 SSH_SERVER_DOMAIN = "ssh.ezdemo.org"
 SERVER_URL = f"https://{HTTP_SERVER_DOMAIN}"
 SSH_SERVER_PORT = 2222
-VERSION = (1, 0, 3)
+VERSION = (1, 0, 4)
 
 stop_event = threading.Event()
 
@@ -291,7 +291,6 @@ def main():
             "--version",
             action="version",
             version=f"%(prog)s v{VERSION[0]}.{VERSION[1]}.{VERSION[2]}",
-            nargs=0,
         )
         args = parser.parse_args()
 
