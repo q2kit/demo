@@ -27,6 +27,7 @@ HTTP_SERVER_DOMAIN = "ezdemo.org"
 SSH_SERVER_DOMAIN = "ssh.ezdemo.org"
 SERVER_URL = f"https://{HTTP_SERVER_DOMAIN}"
 SSH_SERVER_PORT = 2222
+VERSION = (1, 0, 1)
 
 stop_event = threading.Event()
 
@@ -285,7 +286,16 @@ def main():
         parser.add_argument(
             "--health-check", action="store_true", help="Check server health"
         )
+        parser.add_argument(
+            "-v",
+            "--version",
+            action="version",
+            version=f"%(prog)s v{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+        )
         args = parser.parse_args()
+
+        if args.version:
+            return
 
         if args.health_check:
             print("[+] Checking server:", SERVER_URL)
