@@ -1,6 +1,6 @@
 [project]
 name = "demo-cli"
-version = "1.0.2"
+version = "1.0.3"
 description = "EZDEMO makes it easy to demo your web app."
 authors = [
     { name = "Q2k", email = "q2k@q2k.dev" }
@@ -14,7 +14,7 @@ dependencies = [
 license = {text = "MIT"}
 
 [project.urls]
-"Homepage" = "https://github.com/q2kit/demo"
+"Source" = "https://github.com/q2kit/demo"
 
 [build-system]
 requires = ["setuptools>=61.0"]

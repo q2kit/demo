@@ -27,7 +27,7 @@ HTTP_SERVER_DOMAIN = "ezdemo.org"
 SSH_SERVER_DOMAIN = "ssh.ezdemo.org"
 SERVER_URL = f"https://{HTTP_SERVER_DOMAIN}"
 SSH_SERVER_PORT = 2222
-VERSION = (1, 0, 2)
+VERSION = (1, 0, 3)
 
 stop_event = threading.Event()
 
@@ -106,7 +106,7 @@ def reverse_forward_tunnel(remote_port, local_host, local_port, transport):
 
     transport.request_port_forward("", remote_port)
     while not stop_event.is_set():
-        chan = transport.accept(1)  # accept timeout 1 giây để kiểm tra stop_event
+        chan = transport.accept(1)
         if chan is None:
             continue
         thr = threading.Thread(target=handler, args=(chan, local_host, local_port))
@@ -290,12 +290,10 @@ def main():
             "-v",
             "--version",
             action="version",
-            version=f"%(prog)s v{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+            version=f"%(prog)s v{VERSION[0]}.{VERSION[1]}.{VERSION[2]}",
+            nargs=0,
         )
         args = parser.parse_args()
-
-        if args.version:
-            return
 
         if args.health_check:
             print("[+] Checking server:", SERVER_URL)
